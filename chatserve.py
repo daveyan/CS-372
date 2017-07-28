@@ -27,6 +27,9 @@ def sendMessages(connection_socket):
 		return 0
 
 
+if len(argv) < 2:
+        print "Usage: ./chatserve [port number]\n"
+        exit(1)
 
 
 #port number from the command line
