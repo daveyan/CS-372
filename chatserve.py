@@ -55,4 +55,6 @@ while True:
 			break
 		else:
 			sendMessages(connectionSocket)
+	connectionSocket.close()
+	print("Connection is now closed")
 
