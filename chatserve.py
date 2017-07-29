@@ -1,53 +1,58 @@
 #!/usr/bin/python
 
-
 import sys
 import socket
 
-def receiveMessages(connection_socket):
-	print ("Chat session started")
+
+#make sure we have a port number
+if len(sys.argv) !=2:
+	print("Usage: ./chatserve.py [port number] ")
+	sys.exit(1)
+
+#empty server handle string
+server_handle = ''
+while(len(server_handle) > 10 or len(server_handle) == 0):
+	server_handle = input("Enter a server handle (10 characters or less)\n")
+
+
+def sendMessages(connectionSocket):
 	while True:
-		client_message = connection_socket.recv(512)
-		if client_message == "/quit":
-			print ("Chat session ending")
-			return 1
+		server_input = input(server_handle + "> ")
+		server_message = server_handle+"> " + input +'\0'
+		connectionSocket.send(server_message)
 
-		print (client_message)
-		return 0
 
-def sendMessages(connection_socket):
+
+def receiveMessages(connectionSocket):
 	while True:
-		input = raw_input()
-		message = server_hostname + input
-		if input == "/quit":
-			connection_socket.send("/quit")
-			return 1
-
-		connection_socket.send(message)
-		return 0
+		client_message = connectionSocket.recv(512)
+		return client_message.decode()
 
 
-if len(argv) < 2:
-        print "Usage: ./chatserve [port number]\n"
-        exit(1)
-
-
-#port number from the command line
 port = int(sys.argv[1])
 server_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server_socket.bind(('',port))
 server_socket.listen(1)
 
-server_hostname = "Server >"
-
-print("Server ready to connect to")
+print('The server is now listening for a connection')
 
 while True:
-	connection_socket, address = server_socket.accept()
-	
-	if receiveMessages(connection_socket) == 1:
-		break
-	if sendMessages(connection_socket) == 1:
-		break
+	connectionSocket, address = server_socket.accept()
+	print("connection made from address {}".format(address))
 
-	connection_socket.close()
+	client_handle = receiveMessages(connectionSocket)
+
+	connectionSocket.send(server_handle.encode())
+
+	while True:
+		receieved_message = connectionSocket.recv(512)
+		if receieved_message:
+			print(client_handle+"> "+receieved_message.decode())
+
+		send_message = input(server_handle + "> ")
+		if send_message == "\quit":
+			print("Quitting chat")
+			break
+		else:
+			sendMessages(connectionSocket)
+
