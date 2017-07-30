@@ -93,7 +93,7 @@ int main(int argc, char*argv[]){
                 
         
         memset(&read_buff, 0, sizeof(read_buff));
-        recv(sockfd,read_buff, 512, 0)
+        recv(sockfd,read_buff, 512, 0);
         printf("%s> %s\n", server_handle, read_buff);
      
         fflush(stdout);
