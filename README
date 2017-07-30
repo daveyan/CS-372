@@ -1,0 +1,22 @@
+Compile
+
+chatserve.py:
+
+python3 chatserve.py [port number]
+
+This was written in python 3.3 
+pick an arbitrary value for the port number. Perhaps something over 9000!!!! I've tested using 9001
+
+chatclient.c:
+
+gcc chatclient.c -o chatclient [hostname] [port number of server]
+
+In order to get a hostname you can enter the command "ip addr show" and write down the value. I've tested using 127.0.0.1
+and the post number of the server that you have created, 9001.
+
+This was tested on flip as well as a local version of ubuntu bash 16.4 via Windows Subsystem for Linux (WSL) 
+
+This is a single socket non threaded application (no extra credit). Where the client is the first to speak
+You will be able to send messages when you see your handle followed by an > sign.
+Either side can quit from the conversation with the command \quit when they have the prompt.
+
