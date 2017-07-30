@@ -71,8 +71,9 @@ int main(int argc, char*argv[]){
 
 	char read_buff[512];
 	char write_buff[512];
-	
-	while(1){
+
+	int quit = 1;
+	while(quit){
  
         memset(&write_buff, 0, sizeof(write_buff));   
         
@@ -82,13 +83,19 @@ int main(int argc, char*argv[]){
         fgets(write_buff, 512, stdin);       
         //check for quit signal
         if (strncmp(write_buff, "\\quit", 5) == 0){
-            printf("Goodbye\n");
-            close(sockfd);
-            exit(0);
+
+            printf("Quitting chat\n");
+            quit = 0;
         }
         //write message to server
-        
-     	 send(sockfd, write_buff, strlen(write_buff), 0);
+        int send_test = 0;
+
+     	send_test = send(sockfd, write_buff, strlen(write_buff), 0);
+     	if(send_test == -1){
+     		printf("Connection is closed");
+     		close(sockfd);
+     		exit(0);
+     	}
      
                 
         
@@ -101,5 +108,6 @@ int main(int argc, char*argv[]){
 	}
 	
 	close(sockfd);
+	printf("Closing connection to server");
 	return 0;
 }
